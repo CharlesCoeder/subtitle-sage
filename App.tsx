@@ -2,14 +2,17 @@ import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import Button from "./src/components/Button";
+import VideoPlayer from "./src/components/VideoPlayer";
 import * as DocumentPicker from "expo-document-picker";
 
 export default function App() {
+  const [video, setVideo] = React.useState("");
+
   const chooseFileAsync = async () => {
     let result = await DocumentPicker.getDocumentAsync();
 
     if (result.type === "success") {
-      alert(`File chosen: ${result.name}`);
+      setVideo(result.uri);
     }
   };
 
@@ -28,6 +31,7 @@ export default function App() {
           onPress={chooseFileAsync}
         />
       </View>
+      <VideoPlayer source={video} />
       <StatusBar style="auto" />
     </View>
   );
@@ -38,14 +42,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    paddingTop: 50,
   },
 
   header: {
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
+    marginBottom: 20,
   },
 
-  buttonContainer: {},
+  buttonContainer: {
+    alignItems: "center",
+    width: "80%",
+    marginBottom: 20,
+  },
+
+  video: {
+    flex: 1,
+  },
 });
