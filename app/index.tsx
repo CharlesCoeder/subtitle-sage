@@ -1,18 +1,21 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Button from "./src/components/Button";
-import VideoPlayer from "./src/components/VideoPlayer";
+import Button from "../src/components/Button";
 import * as DocumentPicker from "expo-document-picker";
+import { useRouter } from "expo-router";
 
 export default function App() {
-  const [video, setVideo] = React.useState("");
+  const router = useRouter();
 
   const chooseFileAsync = async () => {
     let result = await DocumentPicker.getDocumentAsync();
 
     if (result.type === "success") {
-      setVideo(result.uri);
+      router.push({
+        pathname: "/VideoPlayer",
+        params: { videoURI: encodeURIComponent(result.uri) },
+      });
     }
   };
 
@@ -31,7 +34,6 @@ export default function App() {
           onPress={chooseFileAsync}
         />
       </View>
-      <VideoPlayer source={video} />
       <StatusBar style="auto" />
     </View>
   );
