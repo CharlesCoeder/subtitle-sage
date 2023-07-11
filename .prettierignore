@@ -6,3 +6,7 @@ package.json
 tsconfig.json
 app.json
 README.md
+declarations.d.ts
+metro.config.js
+index.js
+.expo
