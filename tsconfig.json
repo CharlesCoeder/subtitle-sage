@@ -6,6 +6,6 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./declarations.d.ts"],
   "exclude": ["node_modules", "babel.config.js"]
 }
