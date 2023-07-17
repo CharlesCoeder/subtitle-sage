@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { View } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import { useLocalSearchParams } from "expo-router";
+import VideoControls from "../src/components/VideoControls";
 
 export default function VideoPlayer() {
   const video = React.useRef(null);
@@ -21,6 +22,7 @@ export default function VideoPlayer() {
         resizeMode={ResizeMode.CONTAIN}
         shouldPlay={true}
       />
+      <VideoControls videoRef={video} style={styles.controls} />
     </View>
   );
 }
@@ -28,13 +30,23 @@ export default function VideoPlayer() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
 
   video: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     alignSelf: "center",
+  },
+
+  controls: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
   },
 });
