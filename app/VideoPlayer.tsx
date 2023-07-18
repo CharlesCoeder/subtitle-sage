@@ -47,6 +47,5 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
   },
 });

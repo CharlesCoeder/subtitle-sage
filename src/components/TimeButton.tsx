@@ -31,7 +31,10 @@ export default function TimeButton({
       const status = await videoRef.current.getStatusAsync();
       if (isAVPlaybackStatusSuccess(status)) {
         const newPosition = Math.max(0, status.positionMillis - interval); // Don't go below 0
-        await videoRef.current.setPositionAsync(newPosition);
+        await videoRef.current.setPositionAsync(newPosition, {
+          toleranceMillisAfter: 1500,
+          toleranceMillisBefore: 1500,
+        });
 
         // If the video has reached the end, start playback
         const isEndOfVideo =
@@ -52,7 +55,10 @@ export default function TimeButton({
         if (status.durationMillis) {
           newPosition = Math.min(newPosition, status.durationMillis); // Don't go beyond the video duration
         }
-        await videoRef.current.setPositionAsync(newPosition);
+        await videoRef.current.setPositionAsync(newPosition, {
+          toleranceMillisAfter: 1500,
+          toleranceMillisBefore: 1500,
+        });
       }
     }
   };

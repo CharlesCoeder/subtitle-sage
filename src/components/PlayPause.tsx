@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Pressable } from "react-native";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
@@ -11,34 +11,32 @@ import {
 
 interface PlayPauseProps {
   videoRef: React.RefObject<Video>;
+  isPlaying: boolean;
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function PlayPause({ videoRef }: PlayPauseProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
+export default function PlayPause({
+  videoRef,
+  isPlaying,
+  setIsPlaying,
+}: PlayPauseProps) {
   function isAVPlaybackStatusSuccess(
     status: AVPlaybackStatus
   ): status is AVPlaybackStatusSuccess {
     return !(status as AVPlaybackStatusError).error;
   }
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
-        if (isAVPlaybackStatusSuccess(status)) {
-          setIsPlaying(status.isPlaying);
-        }
-      });
-    }
-  }, [videoRef]);
-
   const handlePress = async () => {
     if (videoRef.current) {
       const status = await videoRef.current.getStatusAsync();
-      if (isAVPlaybackStatusSuccess(status) && status.isPlaying) {
-        await videoRef.current.pauseAsync();
-      } else {
-        await videoRef.current.playAsync();
+      if (isAVPlaybackStatusSuccess(status)) {
+        if (isPlaying) {
+          await videoRef.current.pauseAsync();
+          setIsPlaying(false);
+        } else {
+          await videoRef.current.playAsync();
+          setIsPlaying(true);
+        }
       }
     }
   };
