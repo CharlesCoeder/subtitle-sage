@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, StyleProp, ViewStyle } from "react-native";
+import {
+  StyleSheet,
+  View,
+  StyleProp,
+  ViewStyle,
+  TouchableWithoutFeedback,
+} from "react-native";
 import TimeButton from "./TimeButton";
 import PlayPause from "./PlayPause";
 import Scrubber from "./Scrubber";
@@ -12,11 +18,18 @@ import {
 import BackToHome from "./BackToHome";
 
 interface VideoControlsProps {
+  controlsVisible: boolean;
   videoRef: React.RefObject<Video>;
   style?: StyleProp<ViewStyle>;
+  hideControls: () => void;
 }
 
-export default function VideoControls({ videoRef, style }: VideoControlsProps) {
+export default function VideoControls({
+  controlsVisible,
+  videoRef,
+  style,
+  hideControls,
+}: VideoControlsProps) {
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -43,27 +56,33 @@ export default function VideoControls({ videoRef, style }: VideoControlsProps) {
     }
   }, [videoRef]);
 
+  if (!controlsVisible) {
+    return null;
+  }
+
   return (
-    <View style={style}>
-      <View style={styles.back}>
-        <BackToHome />
-      </View>
-      <View style={styles.buttons}>
-        <TimeButton videoRef={videoRef} type="rewind" interval={10000} />
-        <PlayPause
+    <TouchableWithoutFeedback onPress={hideControls}>
+      <View style={style}>
+        <View style={styles.back}>
+          <BackToHome />
+        </View>
+        <View style={styles.buttons}>
+          <TimeButton videoRef={videoRef} type="rewind" interval={10000} />
+          <PlayPause
+            videoRef={videoRef}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+          />
+          <TimeButton videoRef={videoRef} type="forward" interval={10000} />
+        </View>
+        <Scrubber
           videoRef={videoRef}
+          position={position}
+          duration={duration}
           isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
         />
-        <TimeButton videoRef={videoRef} type="forward" interval={10000} />
       </View>
-      <Scrubber
-        videoRef={videoRef}
-        position={position}
-        duration={duration}
-        isPlaying={isPlaying}
-      />
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

@@ -1,13 +1,28 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import { useLocalSearchParams } from "expo-router";
 import VideoControls from "../src/components/VideoControls";
 
 export default function VideoPlayer() {
+  const [controlsVisible, setControlsVisible] = useState(false);
+
   const video = React.useRef(null);
   const { videoURI } = useLocalSearchParams();
+
+  useEffect(() => {
+    if (controlsVisible) {
+      const timer = setTimeout(() => {
+        setControlsVisible(false);
+      }, 3000); // Hide controls after 3 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [controlsVisible]);
+
+  const hideControls = () => {
+    setControlsVisible(false);
+  };
 
   if (!videoURI || Array.isArray(videoURI)) {
     return null;
@@ -15,14 +30,23 @@ export default function VideoPlayer() {
 
   return (
     <View style={styles.container}>
-      <Video
-        ref={video}
-        style={styles.video}
-        source={{ uri: videoURI }}
-        resizeMode={ResizeMode.CONTAIN}
-        shouldPlay={true}
+      <TouchableWithoutFeedback
+        onPress={() => setControlsVisible((prevState) => !prevState)}
+      >
+        <Video
+          ref={video}
+          style={styles.video}
+          source={{ uri: videoURI }}
+          resizeMode={ResizeMode.CONTAIN}
+          shouldPlay={true}
+        />
+      </TouchableWithoutFeedback>
+      <VideoControls
+        controlsVisible={controlsVisible}
+        videoRef={video}
+        style={styles.controls}
+        hideControls={hideControls}
       />
-      <VideoControls videoRef={video} style={styles.controls} />
     </View>
   );
 }
