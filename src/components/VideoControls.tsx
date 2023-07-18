@@ -9,6 +9,7 @@ import {
   AVPlaybackStatusSuccess,
   AVPlaybackStatusError,
 } from "expo-av";
+import BackToHome from "./BackToHome";
 
 interface VideoControlsProps {
   videoRef: React.RefObject<Video>;
@@ -44,6 +45,9 @@ export default function VideoControls({ videoRef, style }: VideoControlsProps) {
 
   return (
     <View style={style}>
+      <View style={styles.back}>
+        <BackToHome />
+      </View>
       <View style={styles.buttons}>
         <TimeButton videoRef={videoRef} type="rewind" interval={10000} />
         <PlayPause
@@ -66,5 +70,11 @@ export default function VideoControls({ videoRef, style }: VideoControlsProps) {
 const styles = StyleSheet.create({
   buttons: {
     flexDirection: "row",
+  },
+
+  back: {
+    position: "absolute",
+    left: 0,
+    top: 0,
   },
 });
