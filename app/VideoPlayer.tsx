@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import { useLocalSearchParams } from "expo-router";
@@ -7,8 +7,8 @@ import VideoControls from "../src/components/VideoControls";
 export default function VideoPlayer() {
   const [controlsVisible, setControlsVisible] = useState(false);
 
-  const video = React.useRef(null);
-  const { videoURI } = useLocalSearchParams();
+  const video = useRef(null);
+  const { videoURI, subtitleURI } = useLocalSearchParams();
 
   useEffect(() => {
     if (controlsVisible) {

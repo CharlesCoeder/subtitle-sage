@@ -8,14 +8,32 @@ import { useRouter } from "expo-router";
 export default function App() {
   const router = useRouter();
 
-  const chooseFileAsync = async () => {
-    let result = await DocumentPicker.getDocumentAsync();
+  let videoURI = "";
+  let subtitleURI = "";
 
+  const updateURI = async (mediaType) => {
+    let result = await DocumentPicker.getDocumentAsync();
     if (result.type === "success") {
+      if (mediaType === "video") {
+        videoURI = encodeURIComponent(result.uri);
+      } else if (mediaType === "subtitle") {
+        subtitleURI = encodeURIComponent(result.uri);
+      }
+    }
+  };
+
+  const changePage = () => {
+    if (videoURI && subtitleURI) {
       router.push({
         pathname: "/VideoPlayer",
-        params: { videoURI: encodeURIComponent(result.uri) },
+        params: { videoURI, subtitleURI },
       });
+    } else if (!videoURI && !subtitleURI) {
+      alert("Please select video & subtitle files!");
+    } else if (!videoURI) {
+      alert("Please select video!");
+    } else {
+      alert("Please select subtitle!");
     }
   };
 
@@ -26,13 +44,18 @@ export default function App() {
         <Button
           label="Select video"
           color="#ff7a5a"
-          onPress={chooseFileAsync}
+          onPress={() => {
+            updateURI("video");
+          }}
         />
         <Button
           label="Select subtitles"
           color="#018fac"
-          onPress={chooseFileAsync}
+          onPress={() => {
+            updateURI("subtitle");
+          }}
         />
+        <Button label="Let's go!" color="green" onPress={changePage} />
       </View>
       <StatusBar style="auto" />
     </View>
