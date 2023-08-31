@@ -7,6 +7,9 @@ import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs';
 import schema from './model/schema';
 import termBank from './model/termBank';
 
+import kuromoji from 'kuromoji'
+// import Zlib from "zlibjs";
+
 // WatermelonDB setup
 const adapter = new LokiJSAdapter({
   schema,
@@ -80,7 +83,10 @@ async function start() {
   })
 }
 
-start();
+// uncomment to import test dictionary
+// start();
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
