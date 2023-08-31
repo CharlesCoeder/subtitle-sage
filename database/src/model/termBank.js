@@ -3,7 +3,8 @@ import { Model } from '@nozbe/watermelondb';
 import { field, json } from '@nozbe/watermelondb/decorators'
 
 const sanitizeDefs = rawDefs => {
-  return Array.isArray(rawDefs) ? rawDefs.map(String) : []
+  const defs = Array.isArray(rawDefs) ? rawDefs : JSON.parse(rawDefs);
+  return Array.isArray(defs) ? defs.map(String) : []
 }
 
 export default class termBank extends Model {
