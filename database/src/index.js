@@ -42,7 +42,7 @@ const adapter = new LokiJSAdapter({
         await database.write(async () => {
           const existingRecords = await termBankCollection.query(
             Q.where('termText', entry[0]),
-            Q.where('reading', entry[1])
+            Q.where('sequenceNum', entry[6])
           ).fetch();
   
           if (existingRecords.length === 0) {
@@ -58,7 +58,7 @@ const adapter = new LokiJSAdapter({
                 record.termTags = entry[7];
               })
             );
-            console.log(`Data written for termText: ${entry[0]} and reading: ${entry[1]}`);
+            console.log(`Data written for termText: ${entry[0]} and sequenceNum: ${entry[6]}. Definitions: ${entry[5]}`);
           } else {
             // console.log(`Entry with termText: ${entry[0]} and reading: ${entry[1]} already exists. Skipping.`);
           }
