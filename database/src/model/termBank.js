@@ -2,9 +2,8 @@
 import { Model } from '@nozbe/watermelondb';
 import { field, json } from '@nozbe/watermelondb/decorators'
 
-const sanitizeReactions = rawReactions => {
-  const parsed = JSON.parse(JSON.parse(rawReactions))
-  return Array.isArray(parsed) ? parsed.map(String) : []
+const sanitizeDefs = rawDefs => {
+  return Array.isArray(rawDefs) ? rawDefs.map(String) : []
 }
 
 export default class termBank extends Model {
@@ -15,7 +14,7 @@ export default class termBank extends Model {
   @field('defTags') defTags;
   @field('rules') rules;
   @field('score') score;
-  @json('definitions', sanitizeReactions) definitions;
+  @json('definitions', sanitizeDefs) definitions;
   @field('sequenceNum') sequenceNum;
   @field('termTags') termTags;
 }

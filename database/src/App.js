@@ -14,10 +14,8 @@ function App({database}) {
   async function handleSearch() {
     const start = performance.now();
     const matches = await database.collections.get('termBank').query(Q.where('termText', searchInput.current.value)).fetch();
-    console.log('-----------------------------------------')
-    console.log('SEARCHING FOR ', searchInput.current.value, ' ---------------------')
-    console.log('-----------------------------------------')
-    console.log('-----------------------------------------')
+    console.log('\n\n-----------------------------------------')
+    console.log('------ SEARCHING FOR ', searchInput.current.value, ' -------')
     console.log('-----------------------------------------')
 
   
