@@ -10,12 +10,12 @@ const sanitizeDefs = rawDefs => {
 export default class termBank extends Model {
   static table = 'termBank';
 
-  @field('termText') termText;  
+  @field('term_text') term_text;  
   @field('reading') reading;
-  @field('defTags') defTags;
+  @field('def_tags') def_tags;
   @field('rules') rules;
   @field('score') score;
   @json('definitions', sanitizeDefs) definitions;
-  @field('sequenceNum') sequenceNum;
-  @field('termTags') termTags;
+  @field('sequence_num') sequence_num;
+  @field('term_tags') term_tags;
 }

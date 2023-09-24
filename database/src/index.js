@@ -94,24 +94,24 @@ const adapter = new LokiJSAdapter({
       for (const entry of entries) {
         await database.write(async () => {
           const existingRecords = await termBankCollection.query(
-            Q.where('termText', entry[0]),
-            Q.where('sequenceNum', entry[6])
+            Q.where('term_text', entry[0]),
+            Q.where('sequence_num', entry[6])
           ).fetch();
   
           if (existingRecords.length === 0) {
             await database.batch(
               termBankCollection.prepareCreate(record => {
-                record.termText = entry[0];
+                record.term_text = entry[0];
                 record.reading = entry[1];
-                record.defTags = entry[2];
+                record.def_tags = entry[2];
                 record.rules = entry[3];
                 record.score = entry[4];
                 record.definitions = JSON.stringify(entry[5]);
-                record.sequenceNum = entry[6];
-                record.termTags = entry[7];
+                record.sequence_num = entry[6];
+                record.term_tags = entry[7];
               })
             );
-            console.log(`Data written for termText: ${entry[0]} and sequenceNum: ${entry[6]}. Definitions: ${entry[5]}`);
+            console.log(`Data written for term_text: ${entry[0]} and sequence_num: ${entry[6]}. Definitions: ${entry[5]}`);
           } else {
             // Existing entry, do nothing
           }

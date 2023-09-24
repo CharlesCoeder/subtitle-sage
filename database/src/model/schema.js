@@ -6,22 +6,22 @@ export const mySchema = appSchema({
 tableSchema({
       name: 'termBank',
       columns: [
-        { name: 'termText', type: 'string', isIndexed: true},
+        { name: 'term_text', type: 'string', isIndexed: true},
         { name: 'reading', type: 'string'},
-        { name: 'defTags', type: 'string'},
+        { name: 'def_tags', type: 'string'},
         { name: 'rules', type: 'string'},
         { name: 'score', type: 'number'},
         { name: 'definitions', type: 'string', isOptional: true},
-        { name: 'sequenceNum', type: 'number', isOptional: true},
-        { name: 'termTags', type: 'string', isOptional: true},
+        { name: 'sequence_num', type: 'number', isOptional: true},
+        { name: 'term_tags', type: 'string', isOptional: true},
       ],
     }),
     tableSchema({
       name: 'tagBank',
       columns: [
-        { name: 'tagName', type: 'string'},
+        { name: 'tag_name', type: 'string'},
         { name: 'category', type: 'string'},
-        { name: 'sortOrder', type: 'number'},
+        { name: 'sort_order', type: 'number'},
         { name: 'notes', type: 'string'},
         { name: 'score', type: 'number'},
       ]
