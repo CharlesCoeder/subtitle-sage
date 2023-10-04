@@ -1,21 +1,25 @@
 // JMDict.js
-import { Model } from '@nozbe/watermelondb';
-import { field, json } from '@nozbe/watermelondb/decorators'
+import { Model } from "@nozbe/watermelondb";
+import { field, json, children } from "@nozbe/watermelondb/decorators";
 
-const sanitizeDefs = rawDefs => {
+const sanitizeDefs = (rawDefs) => {
   const defs = Array.isArray(rawDefs) ? rawDefs : JSON.parse(rawDefs);
-  return Array.isArray(defs) ? defs.map(String) : []
-}
+  return Array.isArray(defs) ? defs.map(String) : [];
+};
 
-export default class termBank extends Model {
-  static table = 'termBank';
+export default class TermBank extends Model {
+  static table = "termBank";
+  static associations = {
+    termTagRelations: { type: "has_many", foreignKey: "term_id" },
+  };
 
-  @field('term_text') term_text;  
-  @field('reading') reading;
-  @field('def_tags') def_tags;
-  @field('rules') rules;
-  @field('score') score;
-  @json('definitions', sanitizeDefs) definitions;
-  @field('sequence_num') sequence_num;
-  @field('term_tags') term_tags;
+  @field("term_text") term_text;
+  @field("reading") reading;
+  @field("rules") rules;
+  @field("score") score;
+  @json("definitions", sanitizeDefs) definitions;
+  @field("sequence_num") sequence_num;
+  @field("term_tags") term_tags;
+
+  @children("termTagRelations") termTagRelations;
 }
