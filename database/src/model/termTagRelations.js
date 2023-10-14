@@ -1,5 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
-import { relation } from "@nozbe/watermelondb/decorators";
+import { field, relation } from "@nozbe/watermelondb/decorators";
 
 export default class TermTagRelations extends Model {
   static table = "termTagRelations";
@@ -10,4 +10,7 @@ export default class TermTagRelations extends Model {
 
   @relation("termBank", "term_id") term;
   @relation("tagBank", "tag_id") tag;
+
+  @field("term_id") term_id;
+  @field("tag_id") tag_id;
 }

@@ -28,7 +28,7 @@ function App({ database, handleClick }) {
     console.log("------ SEARCHING FOR ", searchInput.current.value, " -------");
     console.log("-----------------------------------------");
 
-    matches.forEach((match) => {
+    for (const match of matches) {
       try {
         let definitions = match.definitions;
         if (Array.isArray(definitions)) {
@@ -37,10 +37,31 @@ function App({ database, handleClick }) {
           console.error("Definitions are not in expected format");
           console.log(typeof definitions);
         }
+
+        const relatedTagRelations = await database.collections
+          .get("termTagRelations")
+          .query(Q.where("term_id", match.id))
+          .fetch();
+
+        const relatedTagsPromises = relatedTagRelations.map(
+          async (relation) => {
+            const tag = await database.collections
+              .get("tagBank")
+              .find(relation.tag_id);
+            return tag.tag_name;
+          }
+        );
+
+        const relatedTags = await Promise.all(relatedTagsPromises);
+
+        console.log(
+          `Tags associated with term ${match.term_text}:`,
+          relatedTags.join(", ")
+        );
       } catch (error) {
-        console.error("Error with definitions", error);
+        console.error("Error fetching related tags for term", error);
       }
-    });
+    }
 
     const end = performance.now();
     const timeTaken = end - start;

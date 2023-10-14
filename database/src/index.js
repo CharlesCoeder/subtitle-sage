@@ -25,7 +25,6 @@ const database = new Database({
 
 // This function will open a file selector to unzip & import a dictionary
 const handleClick = async () => {
-  console.log("clicked");
   const input = document.createElement("input");
   input.type = "file";
   input.accept = ".zip"; // Only accept .zip files
@@ -99,7 +98,6 @@ async function importDictionary(fileArray) {
             .query(Q.where("tag_name", entry[0]))
             .fetch();
           if (existingRecords.length === 0) {
-            console.log("not reached");
             await tagBankCollection.create((record) => {
               record.tag_name = entry[0];
               record.category = entry[1];
@@ -107,13 +105,6 @@ async function importDictionary(fileArray) {
               record.notes = entry[3];
               record.score = entry[4];
             });
-            console.log(
-              `Tag data written for tag_name: ${entry[0]}. Category: ${entry[1]}`
-            );
-          } else {
-            console.log(
-              `Tag with tag_name: ${entry[0]} already exists. Skipping.`
-            );
           }
         });
       }
@@ -161,9 +152,6 @@ async function importDictionary(fileArray) {
               record.term_tags = entry[7];
             });
 
-            console.log(
-              `RELATION CREATED WITH ${insertedTerm.term_text} AND ${entry[2]}`
-            );
             const tagNames = entry[2].split(" "); // Assuming tags are space-separated
             for (const tagName of tagNames) {
               const existingTag = await tagBankCollection
@@ -176,12 +164,7 @@ async function importDictionary(fileArray) {
                 });
               }
             }
-            console.log(
-              `Data written for term_text: ${entry[0]} and sequence_num: ${entry[6]}. Definitions: ${entry[5]}`
-            );
           }
-
-          // Process term to tag relations here
         });
       }
     }
