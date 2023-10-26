@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -30,6 +32,9 @@
         "projectId": "2f78595e-3cce-44c4-a0dd-2635dbc294b9"
       }
     },
-    "owner": "charlescoeder"
+    "owner": "charlescoeder",
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
