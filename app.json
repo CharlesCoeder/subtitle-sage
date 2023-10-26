@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.charlescoeder.subtitlesage"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,7 +35,9 @@
     },
     "owner": "charlescoeder",
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-build-properties",
+      "@morrowdigital/watermelondb-expo-plugin"
     ]
   }
 }
