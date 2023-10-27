@@ -13,11 +13,12 @@ export default function App() {
 
   const updateURI = async (mediaType) => {
     let result = await DocumentPicker.getDocumentAsync();
-    if (result.type === "success") {
+    if (!result.canceled) {
+      const pickedDocumentURI = result.assets[0].uri;
       if (mediaType === "video") {
-        videoURI = encodeURIComponent(result.uri);
+        videoURI = encodeURIComponent(pickedDocumentURI);
       } else if (mediaType === "subtitle") {
-        subtitleURI = encodeURIComponent(result.uri);
+        subtitleURI = encodeURIComponent(pickedDocumentURI);
       }
     }
   };
