@@ -11,15 +11,20 @@ export default function App() {
   let videoURI = "";
   let subtitleURI = "";
 
-  const updateURI = async (mediaType) => {
+  const selectFile = async () => {
     let result = await DocumentPicker.getDocumentAsync();
     if (!result.canceled) {
-      const pickedDocumentURI = result.assets[0].uri;
-      if (mediaType === "video") {
-        videoURI = encodeURIComponent(pickedDocumentURI);
-      } else if (mediaType === "subtitle") {
-        subtitleURI = encodeURIComponent(pickedDocumentURI);
-      }
+      return result.assets[0];
+    }
+    return null;
+  };
+
+  const updateURI = async (mediaType) => {
+    const document = await selectFile();
+    if (mediaType === "video" && document) {
+      videoURI = encodeURIComponent(document.uri);
+    } else if (mediaType === "subtitle" && document) {
+      subtitleURI = encodeURIComponent(document.uri);
     }
   };
 
