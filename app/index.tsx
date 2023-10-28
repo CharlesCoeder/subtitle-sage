@@ -1,9 +1,17 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 import Button from "../src/components/Button";
 import * as DocumentPicker from "expo-document-picker";
 import { useRouter } from "expo-router";
+import * as FileSystem from "expo-file-system";
+import { unzip } from "react-native-zip-archive";
+import { importTermBank } from "../src/database/imports/importTermBank";
+
+type FileArray = {
+  filename: string;
+  content: string;
+};
 
 export default function App() {
   const router = useRouter();
@@ -17,6 +25,45 @@ export default function App() {
       return result.assets[0];
     }
     return null;
+  };
+
+  const handleDictionaryImport = async () => {
+    // Open file selector and choose dictionary zip file
+    const file = await selectFile();
+
+    // Use react-native-zip-archive to unzip the file
+    if (file && file.uri) {
+      const targetUnzipDirectory = `${FileSystem.documentDirectory}unzipped/`;
+      try {
+        await FileSystem.makeDirectoryAsync(targetUnzipDirectory, {
+          intermediates: true,
+        });
+
+        await unzip(file.uri, targetUnzipDirectory);
+
+        // Now, read the unzipped contents & store in fileArray for import
+        const fileEntries = await FileSystem.readDirectoryAsync(
+          targetUnzipDirectory
+        );
+
+        const fileArray: FileArray[] = [];
+
+        for (const filename of fileEntries) {
+          const fileContent = await FileSystem.readAsStringAsync(
+            `${targetUnzipDirectory}${filename}`
+          );
+          console.log(`File: ${filename}`);
+          fileArray.push({ filename, content: fileContent });
+        }
+
+        // Call the necessary import function
+        if (fileArray.length > 0) {
+          importTermBank(fileArray);
+        }
+      } catch (error) {
+        console.error("Error processing ZIP file:", error);
+      }
+    }
   };
 
   const updateURI = async (mediaType) => {
@@ -62,6 +109,14 @@ export default function App() {
           }}
         />
         <Button label="Let's go!" color="green" onPress={changePage} />
+        <Button
+          label="Import dictionary"
+          color="#9842f5"
+          onPress={() => {
+            handleDictionaryImport();
+          }}
+        />
+        <TextInput style={styles.input} placeholder="Search for a term!" />
       </View>
       <StatusBar style="auto" />
     </View>
@@ -91,5 +146,11 @@ const styles = StyleSheet.create({
 
   video: {
     flex: 1,
+  },
+
+  input: {
+    width: 200,
+    borderColor: "black",
+    borderWidth: 1,
   },
 });
