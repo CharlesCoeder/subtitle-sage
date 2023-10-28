@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import * as FileSystem from "expo-file-system";
 import { unzip } from "react-native-zip-archive";
 import { importTermBank } from "../src/database/imports/importTermBank";
+import SearchComponent from "../src/components/SearchComponent";
 
 type FileArray = {
   filename: string;
@@ -116,7 +117,7 @@ export default function App() {
             handleDictionaryImport();
           }}
         />
-        <TextInput style={styles.input} placeholder="Search for a term!" />
+        <SearchComponent />
       </View>
       <StatusBar style="auto" />
     </View>
