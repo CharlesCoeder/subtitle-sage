@@ -14,6 +14,10 @@ module.exports = (() => {
     ...resolver,
     assetExts: resolver.assetExts.filter((ext) => ext !== "svg"),
     sourceExts: [...resolver.sourceExts, "svg"],
+    extraNodeModules: {
+      ...resolver.extraNodeModules,
+      path: require.resolve('react-native-path'),
+    },
   };
 
   return config;
