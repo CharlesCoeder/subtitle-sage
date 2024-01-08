@@ -1,5 +1,6 @@
 {
   "expo": {
+    "jsEngine": "jsc",
     "name": "subtitle-sage",
     "slug": "subtitle-sage",
     "version": "1.0.0",
