@@ -4,7 +4,7 @@ import { Collection } from "@nozbe/watermelondb";
 import TermBank from "../database/models/termBank";
 import TermTagRelations from "../database/models/termTagRelations";
 import TagBank from "../database/models/tagBank";
-import kuromoji from "kuromoji";
+import kuromoji from "@charlescoeder/react-native-kuromoji";
 import dictionaryAssets from "./dictionaryAssets";
 
 type TermBankInstance = InstanceType<typeof TermBank>;
@@ -69,6 +69,7 @@ const searchForTerm = async (term: string) => {
 };
 
 const searchTokenizedTerms = async (sentence: string) => {
+  console.log('tokenizing & searching for definitions...');
   kuromoji
     .builder({
       assets: dictionaryAssets,
