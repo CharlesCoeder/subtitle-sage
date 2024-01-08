@@ -5,6 +5,7 @@ import TermBank from "../database/models/termBank";
 import TermTagRelations from "../database/models/termTagRelations";
 import TagBank from "../database/models/tagBank";
 import kuromoji from "kuromoji";
+import dictionaryAssets from "./dictionaryAssets";
 
 type TermBankInstance = InstanceType<typeof TermBank>;
 const termBankCollection: Collection<TermBankInstance> =
@@ -69,7 +70,9 @@ const searchForTerm = async (term: string) => {
 
 const searchTokenizedTerms = async (sentence: string) => {
   kuromoji
-    .builder({ dicPath: "/src/kuromoji-dict/" })
+    .builder({
+      assets: dictionaryAssets,
+    })
     .build(async (err, tokenizer) => {
       if (err) {
         throw err;
