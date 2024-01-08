@@ -16,8 +16,7 @@ module.exports = (() => {
     assetExts: [...resolver.assetExts.filter((ext) => ext !== "svg"), "gz", "svg"],
     sourceExts: [...resolver.sourceExts, "svg"],
     extraNodeModules: {
-      ...resolver.extraNodeModules,
-      path: require.resolve('react-native-path'),
+      ...resolver.extraNodeModules, 
     },
   };
 
