@@ -10,7 +10,7 @@
   },
   "overrides": {},
   "dependencies": {
-    "@charlescoeder/react-native-kuromoji": "^0.2.0",
+    "@charlescoeder/react-native-kuromoji": "*",
     "@morrowdigital/watermelondb-expo-plugin": "^2.1.2",
     "@nozbe/watermelondb": "^0.27.1",
     "@nozbe/with-observables": "^1.6.0",
