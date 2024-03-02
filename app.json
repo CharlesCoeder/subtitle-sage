@@ -1,6 +1,5 @@
 {
   "expo": {
-    "jsEngine": "jsc",
     "name": "subtitle-sage",
     "slug": "subtitle-sage",
     "version": "1.0.0",
@@ -39,7 +38,17 @@
       "expo-router",
       "expo-build-properties",
       "@morrowdigital/watermelondb-expo-plugin",
-      "react-native-vlc-media-player"
+      [
+        "react-native-vlc-media-player",
+        {
+          "ios": {
+            "includeVLCKit": false
+          },
+          "android": {
+            "legacyJetifier": false
+          }
+        }
+      ]
     ]
   }
 }
