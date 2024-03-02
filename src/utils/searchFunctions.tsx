@@ -4,8 +4,6 @@ import { Collection } from "@nozbe/watermelondb";
 import TermBank from "../database/models/termBank";
 import TermTagRelations from "../database/models/termTagRelations";
 import TagBank from "../database/models/tagBank";
-import kuromoji from "@charlescoeder/react-native-kuromoji";
-import dictionaryAssets from "./dictionaryAssets";
 
 type TermBankInstance = InstanceType<typeof TermBank>;
 const termBankCollection: Collection<TermBankInstance> =
@@ -68,30 +66,48 @@ const searchForTerm = async (term: string) => {
   console.log(`Search took ${timeTaken} ms`);
 };
 
-const searchTokenizedTerms = async (sentence: string) => {
-  console.log('tokenizing & searching for definitions...');
-  kuromoji
-    .builder({
-      assets: dictionaryAssets,
-    })
-    .build(async (err, tokenizer) => {
-      if (err) {
-        throw err;
-      }
-
-      // tokenize sentence
-      const tokens = tokenizer.tokenize(sentence);
-
-      // string that will show separated tokens in a readable way
-      let separated = "";
-
-      for (const x of tokens) {
-        const term = x.basic_form;
-        separated += " | " + term;
-        searchForTerm(term);
-      }
-      console.log(separated);
-    });
+const fetchTerms = async (term: string) => {
+  const start = performance.now();
+  const matches: TermBankInstance[] = await termBankCollection
+    .query(Q.where("term_text", term))
+    .fetch();
+  if (term) {
+  }
+  return matches;
 };
 
-export { searchForTerm, searchTokenizedTerms };
+const parseSentence = async (sentence: string) => {
+  let parsedTerms = [];
+  let index = 0;
+
+  while (index < sentence.length) {
+    let longestMatch = "";
+    let longestMatchDetails: TermBankInstance[] = [];
+
+    // Check for the longest valid term starting at the current index
+    for (let length = 1; length <= sentence.length - index; length++) {
+      let currentSegment = sentence.slice(index, index + length);
+      let matches = await fetchTerms(currentSegment);
+
+      if (matches.length > 0) {
+        longestMatch = currentSegment;
+        longestMatchDetails = matches;
+      }
+    }
+
+    if (longestMatch) {
+      // Add the longest match to the parsed terms
+      parsedTerms.push({ term: longestMatch, details: longestMatchDetails });
+      index += longestMatch.length;
+    } else {
+      // If no match found, add the single character as a term and move to the next character
+      let singleCharacter = sentence.slice(index, index + 1);
+      parsedTerms.push({ term: singleCharacter, details: [] });
+      index++;
+    }
+  }
+
+  return parsedTerms;
+};
+
+export { searchForTerm, parseSentence };
