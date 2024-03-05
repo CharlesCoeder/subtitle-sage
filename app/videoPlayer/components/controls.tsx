@@ -1,17 +1,21 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { VLCPlayer } from "react-native-vlc-media-player";
+import PlayPause from "./playPause";
 
 interface VideoControlsProps {
   videoRef: React.RefObject<VLCPlayer>;
   visible: boolean;
+  isPlaying: boolean;
   hideControls: () => void;
+  togglePlay: () => void;
 }
 
 export default function VideoControls({
-  videoRef,
   visible,
+  isPlaying,
   hideControls,
+  togglePlay,
 }: VideoControlsProps) {
   // Hide controls after 3 seconds
   useEffect(() => {
@@ -28,7 +32,7 @@ export default function VideoControls({
     <TouchableWithoutFeedback onPress={hideControls}>
       <View style={styles.container}>
         <Text style={styles.placeholderText}>Video Controls Placeholder</Text>
-        {/* Controls to go here */}
+        <PlayPause isPlaying={isPlaying} togglePlay={togglePlay} />
       </View>
     </TouchableWithoutFeedback>
   ) : null;

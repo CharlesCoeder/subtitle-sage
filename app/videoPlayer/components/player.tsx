@@ -11,9 +11,14 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
   const videoRef = useRef<VLCPlayer>(null);
   const decodedURI = decodeURIComponent(videoURI);
   const [controlsVisible, setControlsVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const handleTap = () => {
     setControlsVisible(!controlsVisible);
+  };
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -23,11 +28,14 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
           ref={videoRef}
           source={{ uri: decodedURI }}
           style={styles.video}
+          paused={!isPlaying}
         />
         <VideoControls
           visible={controlsVisible}
           videoRef={videoRef}
           hideControls={() => setControlsVisible(false)}
+          isPlaying={isPlaying}
+          togglePlay={togglePlay}
         />
       </View>
     </TouchableWithoutFeedback>
