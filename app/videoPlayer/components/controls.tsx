@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { VLCPlayer } from "react-native-vlc-media-player";
 import PlayPause from "./playPause";
+import BackToHome from "./toHome";
 
 interface VideoControlsProps {
   videoRef: React.RefObject<VLCPlayer>;
@@ -32,6 +33,7 @@ export default function VideoControls({
     <TouchableWithoutFeedback onPress={hideControls}>
       <View style={styles.container}>
         <Text style={styles.placeholderText}>Video Controls Placeholder</Text>
+        <BackToHome />
         <PlayPause isPlaying={isPlaying} togglePlay={togglePlay} />
       </View>
     </TouchableWithoutFeedback>
