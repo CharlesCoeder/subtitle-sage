@@ -12,13 +12,26 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
   const decodedURI = decodeURIComponent(videoURI);
   const [controlsVisible, setControlsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [seekValue, setSeekValue] = useState(0);
 
+  // Show/hide controls after tapping the screen
   const handleTap = () => {
     setControlsVisible(!controlsVisible);
   };
 
+  // Passed to PlayPause control
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
+  };
+
+  // Passed to TimeButton control
+  const seekVideo = (ms: number, isForward: boolean) => {
+    let newTime = isForward ? currentTime + ms : currentTime - ms;
+    newTime = isForward ? Math.min(newTime, duration) : Math.max(newTime, 0);
+    const newSeekValue = duration > 0 ? newTime / duration : 0;
+    setSeekValue(newSeekValue);
   };
 
   return (
@@ -29,6 +42,13 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
           source={{ uri: decodedURI }}
           style={styles.video}
           paused={!isPlaying}
+          seek={seekValue}
+          onLoad={(videoInfo) => {
+            setDuration(videoInfo.duration);
+          }}
+          onProgress={(videoInfo) => {
+            setCurrentTime(videoInfo.currentTime);
+          }}
         />
         <VideoControls
           visible={controlsVisible}
@@ -36,6 +56,7 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
           hideControls={() => setControlsVisible(false)}
           isPlaying={isPlaying}
           togglePlay={togglePlay}
+          seekVideo={seekVideo}
         />
       </View>
     </TouchableWithoutFeedback>

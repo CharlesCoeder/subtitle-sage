@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { VLCPlayer } from "react-native-vlc-media-player";
 import PlayPause from "./playPause";
 import BackToHome from "./toHome";
+import TimeButton from "./timeButton";
 
 interface VideoControlsProps {
   videoRef: React.RefObject<VLCPlayer>;
@@ -10,6 +11,7 @@ interface VideoControlsProps {
   isPlaying: boolean;
   hideControls: () => void;
   togglePlay: () => void;
+  seekVideo: (ms: number, isForward: boolean) => void;
 }
 
 export default function VideoControls({
@@ -17,6 +19,7 @@ export default function VideoControls({
   isPlaying,
   hideControls,
   togglePlay,
+  seekVideo,
 }: VideoControlsProps) {
   // Hide controls after 3 seconds
   useEffect(() => {
@@ -35,6 +38,8 @@ export default function VideoControls({
         <Text style={styles.placeholderText}>Video Controls Placeholder</Text>
         <BackToHome />
         <PlayPause isPlaying={isPlaying} togglePlay={togglePlay} />
+        <TimeButton isForward={true} seekVideo={seekVideo} />
+        <TimeButton isForward={false} seekVideo={seekVideo} />
       </View>
     </TouchableWithoutFeedback>
   ) : null;
