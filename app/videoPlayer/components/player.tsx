@@ -27,10 +27,35 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
   };
 
   // Passed to TimeButton control
-  const seekVideo = (ms: number, isForward: boolean) => {
+  const timeSeek = (ms: number, isForward: boolean) => {
     let newTime = isForward ? currentTime + ms : currentTime - ms;
     newTime = isForward ? Math.min(newTime, duration) : Math.max(newTime, 0);
-    const newSeekValue = duration > 0 ? newTime / duration : 0;
+    let newSeekValue = newTime > 0 ? newTime / duration : 0;
+
+    // if seek value is ALREADY 0 while rewinding to beginning,
+    // then set seekValue to an arbitrarily small number
+    // so that React will re-render the VLC player.
+    if (
+      !isForward &&
+      newSeekValue === 0 &&
+      currentTime !== 0 &&
+      seekValue == 0
+    ) {
+      newSeekValue = 0.0000000001;
+    }
+
+    // likewise, if seek value is ALREADY 1 while seeking forward past the end,
+    // then set seekValue to a number arbitrarily close to 1
+    // so that React will re-render the VLC player.
+    if (
+      isForward &&
+      newSeekValue === 1 &&
+      currentTime !== duration &&
+      seekValue === 1
+    ) {
+      newSeekValue = 0.9999999999;
+    }
+    setCurrentTime(newTime);
     setSeekValue(newSeekValue);
   };
 
@@ -56,7 +81,7 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
           hideControls={() => setControlsVisible(false)}
           isPlaying={isPlaying}
           togglePlay={togglePlay}
-          seekVideo={seekVideo}
+          timeSeek={timeSeek}
         />
       </View>
     </TouchableWithoutFeedback>

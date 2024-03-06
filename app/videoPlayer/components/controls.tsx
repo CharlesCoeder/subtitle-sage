@@ -11,7 +11,7 @@ interface VideoControlsProps {
   isPlaying: boolean;
   hideControls: () => void;
   togglePlay: () => void;
-  seekVideo: (ms: number, isForward: boolean) => void;
+  timeSeek: (ms: number, isForward: boolean) => void;
 }
 
 export default function VideoControls({
@@ -19,7 +19,7 @@ export default function VideoControls({
   isPlaying,
   hideControls,
   togglePlay,
-  seekVideo,
+  timeSeek,
 }: VideoControlsProps) {
   // Hide controls after 3 seconds
   useEffect(() => {
@@ -38,8 +38,8 @@ export default function VideoControls({
         <Text style={styles.placeholderText}>Video Controls Placeholder</Text>
         <BackToHome />
         <PlayPause isPlaying={isPlaying} togglePlay={togglePlay} />
-        <TimeButton isForward={true} seekVideo={seekVideo} />
-        <TimeButton isForward={false} seekVideo={seekVideo} />
+        <TimeButton isForward={true} timeSeek={timeSeek} />
+        <TimeButton isForward={false} timeSeek={timeSeek} />
       </View>
     </TouchableWithoutFeedback>
   ) : null;

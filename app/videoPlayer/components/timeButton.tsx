@@ -5,13 +5,13 @@ import Rewind from "../../../assets/rewind.svg";
 
 interface TimeButtonProps {
   isForward: boolean;
-  seekVideo: (ms: number, isForward: boolean) => void;
+  timeSeek: (ms: number, isForward: boolean) => void;
 }
 
-export default function TimeButton({ isForward, seekVideo }: TimeButtonProps) {
+export default function TimeButton({ isForward, timeSeek }: TimeButtonProps) {
   const handlePress = () => {
     const ms = 10000;
-    seekVideo(ms, isForward);
+    timeSeek(ms, isForward);
   };
 
   const commonProps = { fill: "white", width: 80, height: 80 };
