@@ -13,6 +13,7 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
   const [controlsVisible, setControlsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [duration, setDuration] = useState(0);
+  const [position, setPosition] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [seekValue, setSeekValue] = useState(0);
 
@@ -61,6 +62,7 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
 
   const handleProgress = (videoInfo: OnProgressEventProps) => {
     setCurrentTime(videoInfo.currentTime);
+    setPosition(videoInfo.position);
 
     //////////////////////////////////////////////
     // temporary workaround for disabling repeat /
@@ -100,8 +102,11 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
           videoRef={videoRef}
           hideControls={() => setControlsVisible(false)}
           isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          position={position}
           togglePlay={togglePlay}
           timeSeek={timeSeek}
+          setSeekValue={setSeekValue}
         />
       </View>
     </TouchableWithoutFeedback>
