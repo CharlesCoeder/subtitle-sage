@@ -42,17 +42,24 @@ export default function VideoControls({
   return visible ? (
     <TouchableWithoutFeedback onPress={hideControls}>
       <View style={styles.container}>
-        <Text style={styles.placeholderText}>Video Controls Placeholder</Text>
-        <BackToHome />
-        <PlayPause isPlaying={isPlaying} togglePlay={togglePlay} />
-        <TimeButton isForward={true} timeSeek={timeSeek} />
-        <TimeButton isForward={false} timeSeek={timeSeek} />
-        <Scrubber
-          position={position}
-          setSeekValue={setSeekValue}
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
-        />
+        <View style={styles.topControls}>
+          <BackToHome />
+        </View>
+
+        <View style={styles.middleControls}>
+          <TimeButton isForward={false} timeSeek={timeSeek} />
+          <PlayPause isPlaying={isPlaying} togglePlay={togglePlay} />
+          <TimeButton isForward={true} timeSeek={timeSeek} />
+        </View>
+
+        <View style={styles.bottomControls}>
+          <Scrubber
+            position={position}
+            setSeekValue={setSeekValue}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+          />
+        </View>
       </View>
     </TouchableWithoutFeedback>
   ) : null;
@@ -64,11 +71,26 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
+    bottom: 0,
+    justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     padding: 10,
   },
-  placeholderText: {
-    color: "white",
+  topControls: {
+    alignSelf: "flex-start",
+    width: "100%",
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  middleControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bottomControls: {
+    width: "100%",
   },
 });
