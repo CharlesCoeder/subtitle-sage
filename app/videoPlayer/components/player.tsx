@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { VLCPlayer } from "react-native-vlc-media-player";
+import { OnProgressEventProps, VLCPlayer } from "react-native-vlc-media-player";
 import VideoControls from "./controls";
 
 interface VideoPlayerProps {
@@ -59,21 +59,41 @@ export default function VideoPlayer({ videoURI }: VideoPlayerProps) {
     setSeekValue(newSeekValue);
   };
 
+  const handleProgress = (videoInfo: OnProgressEventProps) => {
+    setCurrentTime(videoInfo.currentTime);
+
+    //////////////////////////////////////////////
+    // temporary workaround for disabling repeat /
+    //////////////////////////////////////////////
+
+    // note: repeat={false} prop does not work (on iOS at least)
+    // permanently fix by contributing to react-native-vlc-media-player
+    // the issue with this fix is it that it's not exactly precise and the video
+    //  stops when the currentTime is within 500ms
+
+    // it also relies on continues calls of the onProgress hook
+    // which may be bad for performance.
+
+    // onEnd prop also does not work, which is why I used onProgress as a hack
+    if (duration - currentTime <= 500) {
+      setIsPlaying(false);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={handleTap}>
       <View style={styles.container}>
         <VLCPlayer
           ref={videoRef}
           source={{ uri: decodedURI }}
+          repeat={false}
           style={styles.video}
           paused={!isPlaying}
           seek={seekValue}
           onLoad={(videoInfo) => {
             setDuration(videoInfo.duration);
           }}
-          onProgress={(videoInfo) => {
-            setCurrentTime(videoInfo.currentTime);
-          }}
+          onProgress={handleProgress}
         />
         <VideoControls
           visible={controlsVisible}
